@@ -1,6 +1,6 @@
 const wu=require("./wuLib.js");
 const {getZ}=require("./wuRestoreZ.js");
-const {jsBeautify}=require("./wuJs.js");
+const {wxsBeautify}=require("./wuJs.js");
 const fs=require('fs');
 const path=require("path");
 const esprima=require('esprima');
@@ -273,13 +273,13 @@ function tryWxml(dir,name,code,...args){
 }
 function doWxs(code){
 	const before='nv_module={nv_exports:{}};';
-	return jsBeautify(code.slice(code.indexOf(before)+before.length,code.lastIndexOf('return nv_module.nv_exports;}')).replace(/nv\_/g,''));
+    return wxsBeautify(code.slice(code.indexOf(before)+before.length,code.lastIndexOf('return nv_module.nv_exports;}')).replace(/nv\_/g,''));
 }
 function doFrame(name,cb,order){
 	let moreInfo=order.includes("m");
 	wxsList={};
-	getZ(name,z=>{
-		wu.get(name,code=>{
+	wu.get(name,code=>{
+		getZ(code,z=>{
 			const before="\nvar nv_require=function(){var nnm=";
 			code=code.slice(code.indexOf(before)+before.length,code.lastIndexOf("if(path&&e_[path]){"));
 			json=code.slice(0,code.indexOf("};")+1);
